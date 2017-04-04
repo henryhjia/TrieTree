@@ -1,0 +1,128 @@
+#include <map>
+#include <set>
+#include <list>
+#include <cmath>
+#include <ctime>
+#include <deque>
+#include <queue>
+#include <stack>
+#include <string>
+#include <bitset>
+#include <cstdio>
+#include <limits>
+#include <vector>
+#include <climits>
+#include <cstring>
+#include <cstdlib>
+#include <fstream>
+#include <numeric>
+#include <sstream>
+#include <iostream>
+#include <algorithm>
+#include <unordered_map>
+
+using namespace std;
+
+struct Node {
+    unordered_map<char, Node*> children;
+    //Node* children[26];
+    //map<char, Node*> children;
+    int count;
+    bool is_leaf;
+    //Node() { count = 0; }
+   
+};
+
+class Trie {
+private:
+    Node *_root;
+public:
+    Trie() { _root = new Node(); }
+    void add(string str) {
+        Node *node = _root;
+        for (char c : str) {
+            if (node->children.find(c) == node->children.end()) {
+            //for(int i=0; i<26; i++) {
+                //if(node->children[i] == )
+                node->is_leaf = false;
+                Node *newNode = new Node();
+                node->children[c] = newNode;
+                node = newNode;
+                node->is_leaf = true;
+                //cout << "new node c=" << c << " node=" << newNode << " is_leaf=" << node->is_leaf << endl;
+            } else {
+                
+                node = node->children[c];
+                //node->is_leaf = false;
+                //cout << "move to children c=" << c << " node=" << node << " is_leaf=" << node->is_leaf << endl;
+            }
+            node->count++;
+            //cout << "node->count=" << node->count << endl;
+        }
+    }
+    
+    int find(string str) {
+        Node *node = _root;
+        for (char c : str) {
+            if (node->children.find(c) == node->children.end()) {
+                return 0;
+            } else {
+                //cout << "found c=" << c << endl;
+                node = node->children[c];
+            }
+        }
+        return node->count;
+    }
+    
+    // print lower level children
+    void print_node(unordered_map<char, Node*>& children_map) {        
+        unordered_map<char, Node*>::iterator it;
+        it=children_map.begin();
+        while(it != children_map.end()) {  
+            if((*it).second->count > 1) {
+                for(int i=0; i< ((*it).second->count); i++) {
+                    //cout << (*it).first << (*it).second->count << " ";
+                    cout << (*it).first;
+                }
+                cout << " ";
+            }       
+            else
+                cout << (*it).first << " ";
+            
+            print_node((*it).second->children);    
+            if((*it).second->is_leaf == true) {cout << endl;}
+            it++;            
+            }  
+    } 
+
+  
+    void print() {
+        cout << "print" << endl;
+        print_node(_root->children);      
+    }    
+};
+
+int main(){
+   
+    int n;  
+    cin >> n;
+    Trie me;
+
+    for(int a0 = 0; a0 < n; a0++){
+        string op;
+        string contact;
+        cin >> op >> contact;
+        if( op == "add") {
+
+            me.add(contact);
+        }
+        else if ( op == "find") {
+            cout << me.find(contact) << endl; 
+        }
+        else if (op == "print") {
+            me.print();
+        }
+    }
+    
+    return 0;
+}
