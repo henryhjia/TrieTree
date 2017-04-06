@@ -1,0 +1,37 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+// adds two numbers
+int add ( int a, int b ) {
+   return (a + b);
+}
+
+// subtracts 2nd no. from 1st
+int subtract ( int a, int b ) {
+   return (a - b);
+}
+
+  main()
+  {
+  int x = 5, y = 2;
+   int sum, diff;
+
+   /* declare a function pointer 'operate' with two arguments
+    * It can point to any function with two integer type arguments
+    * and return type 'int' 
+    */
+   int (*operate)(int, int);
+
+   /* decide at run time which function to call (add or subtract) */
+   operate = &add; // 'operate' points to function 'add'
+   sum = operate(x, y); // call add()
+   cout << "Sum : " << sum << endl;
+   operate = &subtract; // 'operate' points to function 'subtract' now
+   diff = operate(x, y); // call subtract()
+   cout << "Difference : " << diff << endl;    
+   
+   return 0
+   }
